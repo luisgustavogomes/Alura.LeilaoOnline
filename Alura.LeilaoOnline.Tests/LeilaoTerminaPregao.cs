@@ -52,7 +52,18 @@ namespace Alura.LeilaoOnline.Tests
             Assert.Equal(valorEsperador, valorObtido);
         }
 
+        [Fact]
+        public void LancaInvalidOperationExceptionDadoPregaoNaoFoiIniciado()
+        {
+            //Arranje
+            var leilao = new Leilao("Van");
 
-
+            //Assert
+            Assert.Throws<System.InvalidOperationException>(
+                //Act    
+                () => leilao.TerminaPregao());
+            
+        }
     }
+
 }

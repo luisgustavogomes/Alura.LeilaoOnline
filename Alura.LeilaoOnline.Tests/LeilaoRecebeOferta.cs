@@ -12,7 +12,7 @@ namespace Alura.LeilaoOnline.Tests
         [Theory]
         [InlineData(4, new double[] { 800, 900, 1000, 990 })]
         [InlineData(5, new double[] { 800, 900, 1000, 990, 1290 })]
-        [InlineData(6, new double[] { 800, 900, 1000, 990, 1300, -100 })]
+        [InlineData(6, new double[] { 800, 900, 1000, 990, 1300, 100 })]
         public void NaoPermiteNovosLancesDadoLeilaoFinalizado(int qtdeEsperado, double[] ofertas)
         {
             //Arranje
