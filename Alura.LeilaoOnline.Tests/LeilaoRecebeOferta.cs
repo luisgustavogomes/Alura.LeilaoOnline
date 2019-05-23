@@ -16,7 +16,8 @@ namespace Alura.LeilaoOnline.Tests
         public void NaoPermiteNovosLancesDadoLeilaoFinalizado(int qtdeEsperado, double[] ofertas)
         {
             //Arranje
-            var leilao = new Leilao("Van");
+            IModalidadeAvaliacao modalidade = new OfertaMaiorValor();
+            var leilao = new Leilao("Van", modalidade);
             var fulano = new Interessada("Fulano", leilao);
             var maria = new Interessada("Maria", leilao);
             leilao.IniciaPregao();
@@ -49,7 +50,8 @@ namespace Alura.LeilaoOnline.Tests
         public void NaoAceitaProximoLanceDadoMesmoInteressadoRealizouUltimoLance()
         {
             //Arranje
-            var leilao = new Leilao("Van");
+            IModalidadeAvaliacao modalidade = new OfertaMaiorValor();
+            var leilao = new Leilao("Van", modalidade);
             var fulano = new Interessada("Fulano", leilao);
             leilao.IniciaPregao();
             leilao.RecebeLance(fulano, 800);

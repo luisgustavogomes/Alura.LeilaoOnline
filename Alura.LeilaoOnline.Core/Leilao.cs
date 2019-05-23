@@ -10,15 +10,16 @@ namespace Alura.LeilaoOnline.Core
 
         private Interessada _ultimoCliente;
         private IList<Lance> _lances;
-        public double ValorDestino { get; set; }
+        private IModalidadeAvaliacao _avaliacao;
+
         public IEnumerable<Lance> Lances => _lances;
         public string Peca { get; }
         public Lance Ganhador { get; private set; }
         public EstadoLeilao Estado { get; set; }
         
-        public Leilao(string peca, double valorDestino=0)
+        public Leilao(string peca, IModalidadeAvaliacao avaliacao)
         {
-            ValorDestino = valorDestino;
+            _avaliacao = avaliacao;
             Peca = peca;
             _lances = new List<Lance>();
             Estado = EstadoLeilao.LeilaoAntesDoPregao;
@@ -48,29 +49,11 @@ namespace Alura.LeilaoOnline.Core
         {
             if (Estado != EstadoLeilao.LeilaoEmAndamento)
                 throw new InvalidOperationException();
-            if (ValorDestino > 0)
-                GanhadorPelaModalidadeDeValorSuperiorMaisProxima();
-            else
-                GanhadorPelaModalidadeDeMelhorPreco();
+            Ganhador = _avaliacao.Avalia(this);
             Estado = EstadoLeilao.LeilaoFinalizado;
         }
 
-        private void GanhadorPelaModalidadeDeMelhorPreco()
-        {
-            Ganhador = Lances
-                .DefaultIfEmpty(new Lance(null, 0))
-                .OrderBy(l => l.Valor)
-                .LastOrDefault();
-        }
-
-        private void GanhadorPelaModalidadeDeValorSuperiorMaisProxima()
-        {
-            Ganhador = Lances
-                .DefaultIfEmpty(new Lance(null, 0))
-                .Where(l => l.Valor > ValorDestino)
-                .OrderBy(l => l.Valor)
-                .FirstOrDefault();
-        }
     }
+
     public enum EstadoLeilao { LeilaoEmAndamento, LeilaoFinalizado, LeilaoAntesDoPregao }
 }
