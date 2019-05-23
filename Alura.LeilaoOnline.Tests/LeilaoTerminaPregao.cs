@@ -64,6 +64,34 @@ namespace Alura.LeilaoOnline.Tests
                 () => leilao.TerminaPregao());
             
         }
+
+
+        [Theory]
+        [InlineData(1200, 1250, new double[] { 800, 1150, 1400, 1250 })]
+        public void RetornaValorSuperiorMaisProximoDadoLeilaoNessaModalidade(double valorDestino, double valorEsperador, double[] ofertas)
+        {
+            //Arranje 
+            var leilao = new Leilao("Van", valorDestino);
+            var fulano = new Interessada("Fulano", leilao);
+            var maria = new Interessada("Maria", leilao);
+            leilao.IniciaPregao();
+
+            for (int i = 0; i < ofertas.Length; i++)
+            {
+                var item = ofertas[i];
+                if ((i % 2) == 0)
+                    leilao.RecebeLance(fulano, item);
+                else
+                    leilao.RecebeLance(maria, item);
+            }
+            //Act 
+            leilao.TerminaPregao();
+
+            //Assert
+            var valorObtido = leilao.Ganhador.Valor;
+
+            Assert.Equal(valorEsperador, valorObtido);
+        }
     }
 
 }
